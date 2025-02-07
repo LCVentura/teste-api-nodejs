@@ -29,25 +29,27 @@ router.post('/', userValidationRules, async (req: Request, res: Response): Promi
 
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
-  
+
       const user = userRepository.create({ name, email, phone, age, ethnicity, password: hashedPassword });
       await userRepository.save(user);
       res.status(201).json(user);
+
     } catch (error) {
-      console.error('Erro ao criar usuário:', error);
       res.status(500).json({ error: 'Erro ao criar usuário', details: error });
     }
   });
   
   router.get('/', async (req: Request, res: Response): Promise<void> => {
     try {
-      const users = await userRepository.find();
+      const users = await userRepository.find({ relations: ['addresses'] });
       res.status(200).json(users);
     } catch (error) {
       console.error('Erro ao listar usuários:', error);
       res.status(500).json({ error: 'Erro ao listar usuários', details: error });
     }
   });
+  
+  
   
   router.put('/:id', async (req: Request, res: Response): Promise<void> => {
     try {

@@ -7,7 +7,6 @@ import * as jwt from 'jsonwebtoken';
 const router = Router();
 const userRepository = AppDataSource.getRepository(User);
 
-// Registro de usuário
 router.post('/register', async (req: Request, res: Response): Promise<void> => {
   const { name, email, password, phone, age, ethnicity } = req.body;
 
@@ -26,7 +25,6 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
   }
 });
 
-// Login de usuário
 router.post('/login', async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
@@ -43,15 +41,22 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET não está definido.');
+    }
+
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET as string, {
       expiresIn: '1h',
     });
 
     res.status(200).json({ token });
   } catch (error) {
+    console.error('Erro ao fazer login:', error);
     res.status(500).json({ message: 'Erro ao fazer login.', error });
   }
 });
+
+
 
 
 export default router;
