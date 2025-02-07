@@ -1,7 +1,7 @@
-// src/index.ts
 import express from 'express';
 import { AppDataSource } from './data-source';
 import userRoutes from './routes/user.routes';
+import authRoutes from './routes/auth.routes';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Rotas
 app.use('/users', userRoutes);
+app.use('/auth', authRoutes);
 
 // Inicialização do banco de dados e do servidor
 AppDataSource.initialize()

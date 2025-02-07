@@ -1,4 +1,3 @@
-// src/entity/User.ts
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity({ name: 'users' })
@@ -24,6 +23,6 @@ export class User {
   @Column({ nullable: true })
   ethnicity!: string;
 
-  // @Column()
-  // password!: string;
+  @Column({ nullable: true })
+  password!: string;
 }
